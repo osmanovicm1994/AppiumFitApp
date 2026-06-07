@@ -13,15 +13,15 @@ dotenv.config();
  */
 class Platform {
     static isAndroid(driver: Browser): boolean {
-    return driver.capabilities.platformName === 'Android';
+        return driver.capabilities.platformName === 'Android';
     }
 
     static isIOS(driver: Browser): boolean {
-    return driver.capabilities.platformName === 'iOS';
+        return driver.capabilities.platformName === 'iOS';
     }
 
-    static name(driver: Browser): string {
-    return driver.capabilities.platformName as string;
+    static getPlatformName(driver: Browser): string {
+        return driver.capabilities.platformName as string;
     }
 }
 
@@ -39,21 +39,23 @@ class Platform {
 
     // iOS devices
 
-    private static udidIphoneSim17 = process.env.UDID_IPHONE_SIM_15;
-    private static platformSim17 = process.env.PLATFORM_VERSION_SIM_15;
-    private static deviceNameIphoneSim17 = process.env.DEVICE_NAME_IPHONE_SIM_15;
+    private static udidIphoneSim17 = process.env.UDID_IPHONE_17;
+    private static platformSim17 = process.env.PLATFORM_VERSION_17;
+    private static deviceNameIphoneSim17 = process.env.DEVICE_NAME_IPHONE_17;
 
-    private static udidIphoneSim17ProMax = process.env.UDID_IPHONE_SIM_15_PRO_MAX;
-    private static platformSim17ProMax = process.env.PLATFORM_VERSION_SIM_15_PRO_MAX;
-    private static deviceNameIphoneSim17ProMax = process.env.DEVICE_NAME_IPHONE_SIM_15_PRO_MAX;
+    private static udidIphoneSim17ProMax = process.env.UDID_IPHONE_17MAX;
+    private static platformSim17ProMax = process.env.PLATFORM_VERSION_17MAX;
+    private static deviceNameIphoneSim17ProMax = process.env.DEVICE_NAME_IPHONE_17MAX;
 
     // Android
-    private static deviceNameAndroidSimuPixel6 = process.env.DEVICE_NAME_ANDROID_SIM_PIXEL6;
+    private static deviceNameAndroidSimuPixel9 = process.env.DEVICE_NAME_ANDROID_PIXEL9;
     private static appPathAndroid = process.env.APP_PATH_ANDROID;
 
     // Environment
     private static env = GeneralHelpers.getAppConfig('environment');
     private static bundle_id = process.env.BUNDLE_ID;
+    private static app_package = process.env.APP_PACKAGE;
+    private static app_activity = process.env.APP_ACTIVITY;
 
     constructor(configApp: string, device: string) {
     this.configApp = configApp;
@@ -70,9 +72,9 @@ class Platform {
 
     switch (this.configApp) {
 
-      // =====================================================
-      // ANDROID PIXEL 9 SIMULATOR
-      // =====================================================
+// =====================================================
+// ANDROID PIXEL 9 SIMULATOR
+// =====================================================
         case 'androidSimulatorPixel9': {
 
         const options = {
@@ -81,20 +83,14 @@ class Platform {
             path: '/',
 
             capabilities: {
-            platformName: 'Android',
-            'appium:deviceName': 'Pixel 9',
-            'appium:automationName': 'UiAutomator2',
-            'appium:app': ParallelSetupTest.appPathAndroid,
-            'appium:appPackage': ParallelSetupTest.bundle_id,
-            'appium:appActivity': 'com.something.ui.launch.LaunchActivity', 
-            /* 
-            You can discover it with:
-            adb shell dumpsys window | grep mCurrentFocus
-            or
-            adb shell cmd package resolve-activity --brief com.winter.FitApp
-            */
-            'appium:disableIdLocatorAutocompletion': true,
-            'appium:adbExecTimeout': 40000
+                platformName: 'Android',
+                'appium:deviceName': ParallelSetupTest.deviceNameAndroidSimuPixel9,
+                'appium:automationName': 'UiAutomator2',
+                'appium:app': ParallelSetupTest.appPathAndroid,
+                'appium:appPackage': ParallelSetupTest.app_package,
+                'appium:appActivity': ParallelSetupTest.app_activity, 
+                'appium:disableIdLocatorAutocompletion': true,
+                'appium:adbExecTimeout': 40000
             }
         };
 
@@ -116,9 +112,9 @@ class Platform {
         break;
     }
 
-      // =====================================================
-      // IOS SIMULATOR 17
-      // =====================================================
+// =====================================================
+// IOS SIMULATOR 17
+// =====================================================
     case 'iosSimulator17': {
 
         const options = {
@@ -127,14 +123,14 @@ class Platform {
             path: '/',
 
             capabilities: {
-            platformName: 'iOS',
-            'appium:automationName': 'XCUITest',
-            'appium:deviceName': ParallelSetupTest.deviceNameIphoneSim17,
-            'appium:udid': ParallelSetupTest.udidIphoneSim17,
-            'appium:platformVersion': ParallelSetupTest.platformSim17,
-            'appium:bundleId': ParallelSetupTest.bundle_id,
-            'appium:noReset': true,
-            'appium:newCommandTimeout': 240
+                platformName: 'iOS',
+                'appium:automationName': 'XCUITest',
+                'appium:deviceName': ParallelSetupTest.deviceNameIphoneSim17,
+                'appium:udid': ParallelSetupTest.udidIphoneSim17,
+                'appium:platformVersion': ParallelSetupTest.platformSim17,
+                'appium:bundleId': ParallelSetupTest.bundle_id,
+                'appium:noReset': true,
+                'appium:newCommandTimeout': 240
             }
         };
 
@@ -155,9 +151,9 @@ class Platform {
         }
         
 
-      // =====================================================
-      // IOS SIMULATOR 15 PRO MAX
-      // =====================================================
+// =====================================================
+// IOS SIMULATOR 17 PRO MAX
+// =====================================================
         case 'iosSimulator17ProMax': {
 
         const options = {
@@ -184,7 +180,7 @@ class Platform {
         await ParallelSetupTest.driver.setTimeout({ implicit: 10000 });
 
         if (Platform.isIOS(ParallelSetupTest.driver)) {
-            console.log('iOS 15 Pro Max session started');
+            console.log('iOS 17 Pro Max session started');
         }
 
         TestSettings
